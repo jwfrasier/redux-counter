@@ -1,49 +1,26 @@
-import { useState, useEffect } from "react";
-import MovieDetails from './MovieDetails.js';
+import React from 'react'
+import {useState} from 'react'
+import ReduxCounter from "./ReduxCounter";
+import {useSelector, useDispatch} from 'react-redux'
+
+// useSelector
+// selects a portion of state (usually the state you want to modify) and gives you back only that piece of state
+
+// useDispatch
+// uses the dispatch method, to update state when you pass it an action object
 
 function App() {
-  const [movieData, setMovieData] = useState([]); // state/set function to store the movie data
-  const [cache, setCache] = useState({});
-  const [currentMovie, setCurrentMovie] = useState({});
+ const [count,setCount] = useState(0)
+  return (
+    <div>
+      <h1>Local State Counter</h1>
+      <p>{count}</p>
+      <button onClick={() => setCount(count +1)}>Increment</button>
+      <button onClick={() => setCount(count -1)}>Decrement</button>
 
-  // similar to componentDid mount lifecycle method
-  useEffect(() => {
-    const setData = async () => {
-      const url =
-        "http://www.omdbapi.com/?s=batman&i=tt3896198&apikey=390a6051";
-
-        //www.omdbapi.com/?i=tt0372784&apikey=74b5f590
-        // imdb id           ^^
-        const reponse = await fetch(url);
-      const data = await reponse.json();
-      console.log(data);
-      setMovieData(data.Search);
-    };
-    setData();
-  }, []);
-const handleClick = async (movie) => {
-    const movieUrl = `http://www.omdbapi.com/?i=${movie.imdbID}&apikey=74b5f590`;
-    const response = await fetch(movieUrl);
-    const data = await response.json();
-    
-    setCurrentMovie(data)
-    
-
-}
-  return <div>
-    {movieData.map((movie)=>{
-      return (
-        <button onClick={()=>handleClick(movie)}>
-          <h3>{movie.Title}</h3>
-          <img height="150px" src={movie.Poster} alt=""/>
-        </button>
-        
-      )
-
-    })}
-    <MovieDetails details={currentMovie}/>
-  </div>;
+      <ReduxCounter />
+    </div>
+  );
 }
 
 export default App;
-
